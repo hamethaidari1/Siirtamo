@@ -8,7 +8,7 @@ import juhla from "@/assets/s-juhla.jpg";
 
 /** Editable business details. Fill in real values; null hides links. */
 export const COMPANY = {
-  name: "Siirtamo siivous palvelut",
+  name: "Siirtamo Siivouspalvelut",
   email: null as string | null, // e.g. "info@siirtamo.fi"
   phone: "+358 44 989 8201",
   emailPlaceholder: "info@siirtamo.fi",

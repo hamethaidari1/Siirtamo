@@ -1,23 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CtaBanner, HowItWorks, PageIntro, Services } from "@/components/site/Sections";
+import { useT } from "@/lib/i18n";
 import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/palvelut")({
-  head: () =>
-    seo(
-      "Palvelut | Kotisiivous, muuttosiivous ja toimistosiivous Helsingissä",
-      "Siivouspalvelut koteihin, toimistoihin, liiketiloihin, päiväkoteihin ja tapahtumiin Helsingissä ja lähialueilla. Pyydä tarjous valitsemastasi palvelusta.",
-    ),
-  component: () => (
+  head: ({ match }) => seo(match.context.lang, "services"),
+  component: ServicesPage,
+});
+
+function ServicesPage() {
+  const t = useT();
+  return (
     <>
-      <PageIntro
-        eyebrow="Palvelut"
-        title="Siivouspalvelut eri tarpeisiin"
-        text="Tarjoamme siivousratkaisuja koteihin, yrityksille ja yhteisöille. Valitsemme sopivan palvelun yhdessä asiakkaan tarpeiden mukaan."
-      />
+      <PageIntro eyebrow={t.services.eyebrow} title={t.services.title} text={t.services.pageText} />
       <Services withHead={false} />
       <HowItWorks />
       <CtaBanner />
     </>
-  ),
-});
+  );
+}

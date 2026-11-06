@@ -90,7 +90,7 @@ function formatNotificationHtml(data: QuoteValues, serviceTitle: string, submiss
   <div class="container">
     <div class="header">
       <h1>Uusi tarjouspyyntö verkkosivuilta</h1>
-      <p>Siirtamo siivous palvelut &bull; Vastaanotettu: ${now}</p>
+      <p>Siirtamo Siivouspalvelut &bull; Vastaanotettu: ${now}</p>
     </div>
     <div class="body">
       <div class="badge">Palvelu: ${serviceTitle}</div>
@@ -151,7 +151,7 @@ function formatNotificationHtml(data: QuoteValues, serviceTitle: string, submiss
  */
 function formatNotificationText(data: QuoteValues, serviceTitle: string, submissionId?: string) {
   return `
-UUSI TARJOUSPYYNTÖ - SIIRTAMO SIIVOUS PALVELUT
+UUSI TARJOUSPYYNTÖ - SIIRTAMO SIIVOUSPALVELUT
 ===============================================
 
 Palvelu: ${serviceTitle}

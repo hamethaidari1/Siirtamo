@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HinnastoRouteImport } from './routes/hinnasto'
 import { Route as MeistaRouteImport } from './routes/meista'
 import { Route as PalvelutRouteImport } from './routes/palvelut'
 import { Route as PyydaTarjousRouteImport } from './routes/pyyda-tarjous'
@@ -19,6 +20,11 @@ import { Route as YhteystiedotRouteImport } from './routes/yhteystiedot'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HinnastoRoute = HinnastoRouteImport.update({
+  id: '/hinnasto',
+  path: '/hinnasto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeistaRoute = MeistaRouteImport.update({
@@ -49,6 +55,7 @@ const YhteystiedotRoute = YhteystiedotRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/hinnasto': typeof HinnastoRoute
   '/meista': typeof MeistaRoute
   '/palvelut': typeof PalvelutRoute
   '/pyyda-tarjous': typeof PyydaTarjousRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/hinnasto': typeof HinnastoRoute
   '/meista': typeof MeistaRoute
   '/palvelut': typeof PalvelutRoute
   '/pyyda-tarjous': typeof PyydaTarjousRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/hinnasto': typeof HinnastoRoute
   '/meista': typeof MeistaRoute
   '/palvelut': typeof PalvelutRoute
   '/pyyda-tarjous': typeof PyydaTarjousRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/hinnasto'
     | '/meista'
     | '/palvelut'
     | '/pyyda-tarjous'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/hinnasto'
     | '/meista'
     | '/palvelut'
     | '/pyyda-tarjous'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/hinnasto'
     | '/meista'
     | '/palvelut'
     | '/pyyda-tarjous'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HinnastoRoute: typeof HinnastoRoute
   MeistaRoute: typeof MeistaRoute
   PalvelutRoute: typeof PalvelutRoute
   PyydaTarjousRoute: typeof PyydaTarjousRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hinnasto': {
+      id: '/hinnasto'
+      path: '/hinnasto'
+      fullPath: '/hinnasto'
+      preLoaderRoute: typeof HinnastoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meista': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HinnastoRoute: HinnastoRoute,
   MeistaRoute: MeistaRoute,
   PalvelutRoute: PalvelutRoute,
   PyydaTarjousRoute: PyydaTarjousRoute,

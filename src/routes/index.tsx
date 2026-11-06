@@ -1,13 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { About, Contact, CtaBanner, Hero, HowItWorks, Services, WhyUs } from "@/components/site/Sections";
+import { PricingCards } from "@/components/site/Pricing";
 import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () =>
-    seo(
-      "Siivouspalvelut Helsinki | Koti-, Toimisto- ja Muuttosiivous",
-      "Luotettavat siivouspalvelut Helsingissä ja lähialueilla. Kotisiivous, muuttosiivous, toimistosiivous, liiketilojen siivous ja paljon muuta. Pyydä tarjous!",
-    ),
+  head: ({ match }) => seo(match.context.lang, "home"),
   component: Index,
 });
 
@@ -16,6 +13,7 @@ function Index() {
     <>
       <Hero />
       <Services />
+      <PricingCards />
       <WhyUs />
       <HowItWorks />
       <About />

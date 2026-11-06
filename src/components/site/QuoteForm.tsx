@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { FREQUENCIES, PROPERTY_TYPES, SERVICES, COMPANY } from "@/lib/site";
 import { quoteSchema, type QuoteValues } from "@/lib/quote-schema";
 import { cn } from "@/lib/utils";
+import { useLang, useServices, useT } from "@/lib/i18n";
+import { FREQUENCY_EN, PROPERTY_TYPE_EN, VALIDATION_EN } from "@/lib/translations";
 
 import { submitQuoteRequest } from "@/lib/quote.functions";
 
@@ -15,6 +17,9 @@ const field =
   "mt-2 block h-12 w-full rounded-xl border border-input bg-card px-4 text-base text-heading transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 aria-[invalid=true]:border-destructive";
 
 export function QuoteForm({ initialService }: { initialService?: string }) {
+  const lang = useLang();
+  const t = useT();
+  const services = useServices();
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const valid = SERVICES.some((s) => s.slug === initialService) ? initialService! : "";
@@ -31,7 +36,7 @@ export function QuoteForm({ initialService }: { initialService?: string }) {
       const result = await submitQuoteRequest({ data: v });
       if (!result.success) {
         setErrorMessage(
-          result.error || "Tarjouspyynnön lähettäminen epäonnistui. Yritä hetken kuluttua uudelleen tai ota yhteyttä suoraan puhelimitse."
+          lang === "fi" && result.error ? result.error : t.form.error,
         );
         setStatus("error");
         return;
@@ -66,7 +71,7 @@ export function QuoteForm({ initialService }: { initialService?: string }) {
         // ignore fallback error
       }
 
-      setErrorMessage("Tarjouspyynnön lähettäminen epäonnistui. Yritä hetken kuluttua uudelleen tai ota yhteyttä suoraan puhelimitse.");
+      setErrorMessage(t.form.error);
       setStatus("error");
     }
   };
@@ -77,13 +82,13 @@ export function QuoteForm({ initialService }: { initialService?: string }) {
         <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-mint text-primary">
           <CheckCircle2 className="h-9 w-9" aria-hidden />
         </div>
-        <h3 className="mt-5 text-2xl font-bold text-heading">Kiitos tarjouspyynnöstäsi!</h3>
+        <h3 className="mt-5 text-2xl font-bold text-heading">{t.form.successTitle}</h3>
         <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-muted-foreground">
-          Tietosi on vastaanotettu onnistuneesti. Käsittelemme pyyntösi ja otamme sinuun yhteyttä mahdollisimman pian.
+          {t.form.successText}
         </p>
         {COMPANY.phone && (
           <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-            Kiireellisissä asioissa voit myös soittaa meille suoraan:{" "}
+            {t.form.successCall}{" "}
             <a
               href={`tel:${COMPANY.phone.replace(/\s/g, "")}`}
               className="font-bold text-primary underline underline-offset-2"
@@ -93,54 +98,59 @@ export function QuoteForm({ initialService }: { initialService?: string }) {
           </p>
         )}
         <Button variant="outline" className="mt-7 font-semibold" onClick={() => setStatus("idle")}>
-          Lähetä uusi pyyntö
+          {t.form.newRequest}
         </Button>
       </div>
     );
   }
 
+  const message = (text: unknown) => {
+    const finnish = String(text ?? "");
+    return lang === "en" ? (VALIDATION_EN[finnish] ?? finnish) : finnish;
+  };
+  const optional = t.form.optional;
   const err = (k: keyof QuoteValues) =>
-    errors[k] ? <p id={`${k}-err`} className="mt-1.5 text-xs font-semibold text-destructive">{errors[k]?.message as string}</p> : null;
+    errors[k] ? <p id={`${k}-err`} className="mt-1.5 text-xs font-semibold text-destructive">{message(errors[k]?.message)}</p> : null;
   const aria = (k: keyof QuoteValues) => ({ "aria-invalid": !!errors[k], "aria-describedby": errors[k] ? `${k}-err` : undefined });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-10">
       <div className="grid gap-6 sm:grid-cols-2">
-        <Field label="Nimi" required htmlFor="name">
+        <Field label={t.form.name} optionalText={optional} required htmlFor="name">
           <input id="name" autoComplete="name" className={field} {...aria("name")} {...register("name")} />{err("name")}
         </Field>
-        <Field label="Sähköpostiosoite" required htmlFor="email">
+        <Field label={t.form.email} optionalText={optional} required htmlFor="email">
           <input id="email" type="email" autoComplete="email" className={field} {...aria("email")} {...register("email")} />{err("email")}
         </Field>
-        <Field label="Puhelinnumero" htmlFor="phone">
+        <Field label={t.form.phone} optionalText={optional} htmlFor="phone">
           <input id="phone" type="tel" autoComplete="tel" className={field} {...aria("phone")} {...register("phone")} />{err("phone")}
         </Field>
-        <Field label="Siivouspalvelu" required htmlFor="service">
+        <Field label={t.form.service} optionalText={optional} required htmlFor="service">
           <select id="service" className={field} {...aria("service")} {...register("service")}>
-            <option value="">Valitse palvelu</option>
-            {SERVICES.map((s) => <option key={s.slug} value={s.slug}>{s.title}</option>)}
+            <option value="">{t.form.selectService}</option>
+            {services.map((s) => <option key={s.slug} value={s.slug}>{s.title}</option>)}
           </select>{err("service")}
         </Field>
-        <Field label="Kohteen tyyppi" htmlFor="propertyType">
+        <Field label={t.form.propertyType} optionalText={optional} htmlFor="propertyType">
           <select id="propertyType" className={field} {...register("propertyType")}>
-            <option value="">Valitse kohde</option>
-            {PROPERTY_TYPES.map((p) => <option key={p}>{p}</option>)}
+            <option value="">{t.form.selectProperty}</option>
+            {PROPERTY_TYPES.map((p) => <option key={p} value={p}>{lang === "en" ? PROPERTY_TYPE_EN[p] : p}</option>)}
           </select>
         </Field>
-        <Field label="Postinumero tai sijainti" required htmlFor="location">
+        <Field label={t.form.location} optionalText={optional} required htmlFor="location">
           <input id="location" autoComplete="postal-code" className={field} {...aria("location")} {...register("location")} />{err("location")}
         </Field>
-        <Field label="Siivouksen toivottu ajankohta" htmlFor="preferredDate">
+        <Field label={t.form.date} optionalText={optional} htmlFor="preferredDate">
           <input id="preferredDate" type="date" className={field} {...register("preferredDate")} />
         </Field>
-        <Field label="Siivouksen toistuvuus" htmlFor="frequency">
+        <Field label={t.form.frequency} optionalText={optional} htmlFor="frequency">
           <select id="frequency" className={field} {...register("frequency")}>
-            <option value="">Valitse toistuvuus</option>
-            {FREQUENCIES.map((f) => <option key={f}>{f}</option>)}
+            <option value="">{t.form.selectFrequency}</option>
+            {FREQUENCIES.map((f) => <option key={f} value={f}>{lang === "en" ? FREQUENCY_EN[f] : f}</option>)}
           </select>
         </Field>
-        <Field label="Lisätiedot ja toiveet" htmlFor="details" className="sm:col-span-2">
-          <textarea id="details" rows={4} className={cn(field, "h-auto py-3")} placeholder="Kerro tarkemmin kohteesta, neliöistä tai toiveistasi..." {...aria("details")} {...register("details")} />{err("details")}
+        <Field label={t.form.details} optionalText={optional} htmlFor="details" className="sm:col-span-2">
+          <textarea id="details" rows={4} className={cn(field, "h-auto py-3")} placeholder={t.form.detailsPlaceholder} {...aria("details")} {...register("details")} />{err("details")}
         </Field>
       </div>
 
@@ -148,7 +158,7 @@ export function QuoteForm({ initialService }: { initialService?: string }) {
         <label className="flex cursor-pointer items-start gap-3 text-sm text-heading">
           <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 rounded accent-primary" {...aria("privacy")} {...register("privacy")} />
           <span className="leading-relaxed">
-            Olen lukenut <Link to="/tietosuojaseloste" target="_blank" className="font-semibold text-primary underline underline-offset-2 hover:text-primary/80">tietosuojaselosteen</Link> ja hyväksyn tietojeni käsittelyn tarjouspyynnön käsittelyä varten. <span className="text-destructive">*</span>
+            {t.form.privacyBefore} <Link to="/tietosuojaseloste" target="_blank" className="font-semibold text-primary underline underline-offset-2 hover:text-primary/80">{t.form.privacyLink}</Link> {t.form.privacyAfter} <span className="text-destructive">*</span>
           </span>
         </label>
         {err("privacy")}
@@ -157,7 +167,7 @@ export function QuoteForm({ initialService }: { initialService?: string }) {
       {status === "error" && (
         <div role="alert" className="mt-6 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
           <AlertCircle className="h-5 w-5 shrink-0" aria-hidden />
-          <span>{errorMessage || "Tarjouspyynnön lähettäminen epäonnistui. Yritä hetken kuluttua uudelleen tai ota yhteyttä suoraan sähköpostitse."}</span>
+          <span>{errorMessage || t.form.error}</span>
         </div>
       )}
 
@@ -167,17 +177,17 @@ export function QuoteForm({ initialService }: { initialService?: string }) {
         disabled={isSubmitting}
         className="mt-8 w-full sm:w-auto font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft transition-all duration-200 hover:shadow-card hover:-translate-y-0.5"
       >
-        {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Lähetetään…</> : "Lähetä tarjouspyyntö"}
+        {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t.form.submitting}</> : t.form.submit}
       </Button>
     </form>
   );
 }
 
-function Field({ label, required, htmlFor, className, children }: { label: string; required?: boolean; htmlFor: string; className?: string; children: React.ReactNode }) {
+function Field({ label, optionalText, required, htmlFor, className, children }: { label: string; optionalText: string; required?: boolean; htmlFor: string; className?: string; children: React.ReactNode }) {
   return (
     <div className={className}>
       <label htmlFor={htmlFor} className="text-sm font-semibold text-heading">
-        {label} {required ? <span className="text-destructive">*</span> : <span className="font-normal text-muted-foreground">(valinnainen)</span>}
+        {label} {required ? <span className="text-destructive">*</span> : <span className="font-normal text-muted-foreground">{optionalText}</span>}
       </label>
       {children}
     </div>

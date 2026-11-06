@@ -4,26 +4,24 @@ import { Phone } from "lucide-react";
 import { PageIntro } from "@/components/site/Sections";
 import { QuoteForm } from "@/components/site/QuoteForm";
 import { COMPANY } from "@/lib/site";
+import { useT } from "@/lib/i18n";
 import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/pyyda-tarjous")({
   validateSearch: z.object({ palvelu: z.string().optional() }),
-  head: () =>
-    seo(
-      "Pyydä maksuton tarjous | Siivouspalvelut Helsinki",
-      "Kerro siivoustarpeestasi ja pyydä maksuton tarjous kotisiivouksesta, muuttosiivouksesta, toimistosiivouksesta tai muusta siivouspalvelusta.",
-    ),
+  head: ({ match }) => seo(match.context.lang, "quote"),
   component: QuotePage,
 });
 
 function QuotePage() {
   const { palvelu } = Route.useSearch();
+  const t = useT();
   return (
     <>
       <PageIntro
-        eyebrow="Tarjouspyyntö"
-        title="Pyydä maksuton tarjous"
-        text="Kerro meille siivoustarpeestasi, niin voimme suunnitella sinulle sopivan palvelun."
+        eyebrow={t.quotePage.eyebrow}
+        title={t.quotePage.title}
+        text={t.quotePage.text}
       />
       <section className="mx-auto max-w-4xl px-5 py-16 sm:px-8 lg:py-20">
         {COMPANY.phone && (
@@ -33,8 +31,8 @@ function QuotePage() {
                 <Phone className="h-5 w-5" aria-hidden />
               </span>
               <div>
-                <p className="text-sm font-bold text-heading">Haluatko mieluummin asioida puhelimitse?</p>
-                <p className="text-xs text-muted-foreground">Vastaamme mielellämme kysymyksiisi suoraan puhelimitse.</p>
+                <p className="text-sm font-bold text-heading">{t.quotePage.phoneTitle}</p>
+                <p className="text-xs text-muted-foreground">{t.quotePage.phoneText}</p>
               </div>
             </div>
             <a
