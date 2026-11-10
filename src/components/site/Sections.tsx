@@ -25,7 +25,7 @@ import { ContactValue } from "./ContactValue";
 import { QuoteForm } from "./QuoteForm";
 import heroVideo from "@/assets/herovideo.mp4";
 import heroPoster from "@/assets/herovideo-poster.jpg";
-import why from "@/assets/s-koti.jpg";
+import why from "@/assets/pic-5.jpeg";
 
 /* ─── Shared section heading ─────────────────────────────────────── */
 export function SectionHead({

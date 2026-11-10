@@ -1,10 +1,10 @@
-import muutto from "@/assets/s-muutto.jpg";
-import koti from "@/assets/s-koti.jpg";
-import toimisto from "@/assets/s-toimisto.jpg";
-import paivakoti from "@/assets/s-paivakoti.jpg";
-import myymala from "@/assets/s-myymala.jpg";
-import auto from "@/assets/s-auto.jpg";
-import juhla from "@/assets/s-juhla.jpg";
+import muutto from "@/assets/pic-1.jpeg";
+import koti from "@/assets/pic-5.jpeg";
+import toimisto from "@/assets/pic-2.jpeg";
+import paivakoti from "@/assets/pic-7.jpeg";
+import myymala from "@/assets/pic-6.jpeg";
+import auto from "@/assets/pic-3.jpeg";
+import juhla from "@/assets/pic-4.jpeg";
 
 /** Editable business details. Fill in real values; null hides links. */
 export const COMPANY = {
