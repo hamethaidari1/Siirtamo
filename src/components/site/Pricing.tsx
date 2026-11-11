@@ -44,6 +44,7 @@ export function PricingCards() {
           const Icon = ICONS[service.slug] ?? Sparkles;
           const price = PRICES[service.slug];
           const rate = price?.hourlyRate ?? null;
+          const rateOnce = price?.hourlyRateOnce ?? null;
           const minimum = price?.minimumHours ?? null;
           return (
             <Reveal key={service.slug} delay={i * 70}>
@@ -68,15 +69,30 @@ export function PricingCards() {
                     </>
                   ) : (
                     <>
-                      <p className="eyebrow">{t.pricing.startingAt}</p>
-                      <p className="mt-2 text-4xl font-extrabold tracking-tight text-heading">
-                        {formatPrice(lang, rate)}
-                        <span className="ml-1.5 text-sm font-medium tracking-normal text-muted-foreground">
-                          {t.pricing.perHour}
-                        </span>
-                      </p>
+                      <div className="flex flex-col gap-2">
+                        <div>
+                          <p className="eyebrow text-[0.65rem]">{t.pricing.regular}</p>
+                          <p className="mt-0.5 text-3xl font-extrabold tracking-tight text-heading">
+                            {formatPrice(lang, rate)}
+                            <span className="ml-1.5 text-sm font-medium tracking-normal text-muted-foreground">
+                              {t.pricing.perHour}
+                            </span>
+                          </p>
+                        </div>
+                        {rateOnce !== null && (
+                          <div>
+                            <p className="eyebrow text-[0.65rem]">{t.pricing.oneTime}</p>
+                            <p className="mt-0.5 text-2xl font-bold tracking-tight text-heading/80">
+                              {formatPrice(lang, rateOnce)}
+                              <span className="ml-1.5 text-sm font-medium tracking-normal text-muted-foreground">
+                                {t.pricing.perHour}
+                              </span>
+                            </p>
+                          </div>
+                        )}
+                      </div>
                       <p className="mt-2 text-xs text-muted-foreground">
-                        {t.pricing.inclVat}
+                        {t.pricing.inclVat} 25,5 %
                         {minimum !== null && ` · ${t.pricing.minimum} ${minimum} h`}
                       </p>
                     </>
@@ -154,6 +170,7 @@ export function PriceTable() {
               const Icon = ICONS[service.slug] ?? Sparkles;
               const price = PRICES[service.slug];
               const rate = price?.hourlyRate ?? null;
+              const rateOnce = price?.hourlyRateOnce ?? null;
               const minimum = price?.minimumHours ?? null;
               return (
                 <tr key={service.slug} className="border-b border-border last:border-0">
@@ -170,10 +187,18 @@ export function PriceTable() {
                       <span className="font-bold text-heading">{t.pricing.onRequest}</span>
                     ) : (
                       <>
+                        <span className="block text-[0.6rem] font-bold uppercase tracking-wider text-muted-foreground">{t.pricing.regular}</span>
                         <span className="font-bold text-heading">{formatPrice(lang, rate)}</span>
                         <span className="text-muted-foreground"> {t.pricing.perHour}</span>
+                        {rateOnce !== null && (
+                          <>
+                            <span className="mt-1 block text-[0.6rem] font-bold uppercase tracking-wider text-muted-foreground">{t.pricing.oneTime}</span>
+                            <span className="font-semibold text-heading/80">{formatPrice(lang, rateOnce)}</span>
+                            <span className="text-muted-foreground"> {t.pricing.perHour}</span>
+                          </>
+                        )}
                         <span className="block text-xs text-muted-foreground">
-                          {t.pricing.inclVat}
+                          {t.pricing.inclVat} 25,5 %
                         </span>
                       </>
                     )}
