@@ -609,49 +609,49 @@ export const SERVICE_TEXT_EN: Record<
     description:
       "Thorough cleaning before or after a move, or when handing over a home. We make sure the space is clean and ready for the next step.",
     cta: "Get a quote",
-    alt: "An empty, clean apartment after move-out cleaning",
+    alt: "A cleaner wiping a counter in an empty apartment among moving boxes",
   },
   kotisiivous: {
     title: "Home and apartment cleaning",
     description:
       "Regular or one-off cleaning for homes and apartments. We keep your home clean, cosy and pleasant.",
     cta: "Get a quote",
-    alt: "A cleaner vacuuming a bright living room",
+    alt: "A cleaner vacuuming a rug in a bright living room",
   },
   toimistosiivous: {
     title: "Office cleaning",
     description:
       "Clean, pleasant workspaces for businesses. We plan flexible cleaning solutions for offices and other work environments.",
     cta: "Get a quote",
-    alt: "A cleaner wiping desks in a modern office",
+    alt: "A cleaner vacuuming the floor of an open-plan office",
   },
   "paivakodit-ja-koulut": {
     title: "Daycare and school cleaning",
     description:
       "Careful upkeep of the premises, taking into account the needs of children, staff and other users.",
     cta: "Ask for more",
-    alt: "Mopping the floor of a daycare classroom",
+    alt: "A cleaner mopping the floor of a daycare playroom",
   },
   liiketilat: {
     title: "Shop and commercial premises cleaning",
     description:
       "We keep shops, supermarkets and other commercial premises clean, pleasant and presentable.",
     cta: "Get a quote",
-    alt: "Cleaning the floor of a shop",
+    alt: "A cleaner mopping the floor of a clothing store",
   },
   "autojen-sisapuhdistus": {
     title: "Car interior cleaning",
     description:
       "Cleaning of vehicle interiors, seats, floors and other surfaces for a tidy, fresh result.",
     cta: "Get a quote",
-    alt: "Vacuuming a car seat with a handheld vacuum",
+    alt: "A cleaner vacuuming a car's front seat",
   },
   "juhlat-ja-tapahtumat": {
     title: "Party and event cleaning",
     description:
       "Cleaning before and after an event. We help keep event spaces tidy, so you can focus on the arrangements and the event itself.",
     cta: "Get a quote",
-    alt: "Tidying a party venue after an event",
+    alt: "A cleaner wiping a table at an event venue",
   },
 };
 
